@@ -66,7 +66,7 @@ virt-install -h >/dev/null 2>&1 || { echo >&2 "Please install libvirt"; exit 2; 
 virt-install \
 --virt-type kvm \
 --name=$name \
---disk path=/kvm/disk/$name.img,size=32,format=qcow2 \
+--disk path=/kvm/disk/$name.img,size=$storage,format=qcow2 \
 --ram=$ram \
 --vcpus=$vcpus \
 --os-variant debian10   \
