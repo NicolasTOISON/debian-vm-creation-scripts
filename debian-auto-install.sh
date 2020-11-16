@@ -17,7 +17,7 @@ debian_mirror=$url_debian_mirror
 
 autoconsole=""
 #autoconsole="--noautoconsole"
-url_configuration="http://${bridgeip4}/conf/${image}-${name}.cfg"
+url_configuration="http://${bridgeip4}/conf/debian-${name}.cfg"
 
 usage () {
 echo "Usage : $0 vm_name nb_vcpus amout_ram amount_storage"
@@ -64,13 +64,13 @@ if ! grep -q 'vmx\|svm' /proc/cpuinfo ; then echo "Please enable virtualization 
 [ `grep -c 'vmx\|svm' /proc/cpuinfo` == 0 ] && { echo "Please enable virtualization instructions" ; exit 1 ;  }
 virt-install -h >/dev/null 2>&1 || { echo >&2 "Please install libvirt"; exit 2; }
 virt-install \
---virt-type=kvm \
+--virt-type kvm \
 --name=$name \
 --disk path=/kvm/disk/$name.img,size=32,format=qcow2 \
 --ram=$ram \
 --vcpus=$vcpus \
 --os-variant debian10   \
---os-type linux
+--os-type linux \
 --network bridge=$bridge \
 --graphics none \
 --noreboot \
@@ -80,8 +80,8 @@ virt-install \
 }
 
 debian_response_file () {
-touch /var/www/html/conf/${image}-${name}.cfg
-cat << EOF > /var/www/html/conf/${image}-${name}.cfg
+touch /var/www/html/conf/debian-${name}.cfg
+cat << EOF > /var/www/html/conf/debian-${name}.cfg
 d-i debian-installer/locale string en_US
 d-i keyboard-configuration/xkb-keymap select be
 d-i netcfg/choose_interface select auto
@@ -123,16 +123,13 @@ EOF
 }
 
 configure_installation () {
-case $image in
-    debian)
-        mirror=$debian_mirror
-        os="debian10"
-        config="url=$url_configuration"
-        debian_response_file ;;
-esac
+  mirror=$debian_mirror
+  os="debian10"
+  config="url=$url_configuration"
+  debian_response_file
 }
 
 check_guest_name
-#check_apache
+check_apache
 configure_installation
 launch_guest
