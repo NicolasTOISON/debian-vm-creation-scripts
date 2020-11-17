@@ -76,7 +76,7 @@ virt-install \
 --noreboot \
 --console pty,target_type=serial \
 --location $mirror \
--x "auto=true hostname=$name domain=$config text console=ttyS0 $autoconsole"
+-x "auto=true hostname=$name domain= $config text console=ttyS0 $autoconsole"
 }
 
 debian_response_file () {
