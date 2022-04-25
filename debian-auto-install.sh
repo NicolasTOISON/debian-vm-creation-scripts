@@ -16,7 +16,7 @@ curl -V >/dev/null 2>&1 || { echo >&2 "Please install curl"; exit 2; }
 debian_mirror=$url_debian_mirror
 
 autoconsole=""
-#autoconsole="--noautoconsole"
+
 url_configuration="http://${bridgeip4}/conf/debian-${name}.cfg"
 
 usage () {
